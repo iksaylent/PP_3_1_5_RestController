@@ -14,7 +14,6 @@ import java.util.Collections;
 public class AuthProvid implements AuthenticationProvider {
     private UserService userService;
 
-    @Autowired
     public AuthProvid(UserService userService) {
         this.userService = userService;
     }
