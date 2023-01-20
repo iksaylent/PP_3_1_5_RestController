@@ -24,10 +24,10 @@ public class Util {
     public void initializeDB() {
         roleService.addRole(new Role("ROLE_ADMIN"));
         roleService.addRole(new Role("ROLE_USER"));
-        userService.addUser(new User("name1", "lastname1", 20, "admin",
+        userService.addUser(new User("admin", "admin", "admin@admin.ru",
                 "admin", Set.of(new Role(1L, "ROLE_ADMIN"))));
-        userService.addUser(new User("name2", "lastname2", 20, "user1",
-                "user1", Set.of(new Role(2L, "ROLE_USER"))));
+        userService.addUser(new User("user", "user", "user@user.ru",
+                "user", Set.of(new Role(2L, "ROLE_USER"))));
 
     }
 }

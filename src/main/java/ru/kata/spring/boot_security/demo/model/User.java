@@ -2,9 +2,7 @@ package ru.kata.spring.boot_security.demo.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,18 +15,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
+    @Column(name = "userName")
     @Size(min = 2, message = "Поле должно создержать не менее 2 знаков")
-    private String name;
-    @Column(name = "lastName")
+    private String userName;
+    @Column(name = "surName")
     @Size(min = 2, message = "Поле должно создержать не менее 2 знаков")
-    private String lastName;
-    @Column(name = "age")
-    @Min(value = 0, message = "Возраст не может быть меньше 0")
-    private int age;
-    @Column(name = "username")
+    private String surName;
+    @Column(name = "emeil")
     @Size(min = 2, message = "Поле должно создержать не менее 2 знаков")
-    private String username;
+    private String emeil;
     @Column(name = "password")
     @Size(min = 2, message = "Поле должно создержать не менее 2 знаков")
     private String password;
@@ -43,11 +38,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, int age, String username, String password, Set<Role> roles) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-        this.username = username;
+    public User(String userName, String surName, String emeil, String password, Set<Role> roles) {
+        this.userName = userName;
+        this.surName = surName;
+        this.emeil = emeil;
         this.password = password;
         this.roles = roles;
     }
@@ -60,28 +54,29 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getLastName() {
-        return lastName;
+
+    public String getSurName() {
+        return surName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setSurName(String surName) {
+        this.surName = surName;
     }
 
-    public int getAge() {
-        return age;
+    public String getEmeil() {
+        return emeil;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setEmeil(String emeil) {
+        this.emeil = emeil;
     }
 
 
@@ -89,9 +84,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -124,7 +116,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     @Override
@@ -153,23 +145,23 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && Objects.equals(id, user.id) && Objects.equals(name, user.name) &&
-                Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username) &&
+        return  Objects.equals(id, user.id) && Objects.equals(userName, user.userName) &&
+                Objects.equals(surName, user.surName) && emeil == user.emeil &&
                 Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, age, username, password, roles);
+        return Objects.hash(id, userName, surName, emeil, password, roles);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
+                ", userName='" + userName + '\'' +
+                ", surName='" + surName + '\'' +
+                ", emeil=" + emeil +
                 '}';
     }
 }
