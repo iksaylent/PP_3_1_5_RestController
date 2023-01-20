@@ -1,68 +1,71 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
-
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 
-    public List<User> findAllUsers() {
+    @Override
+    public List<User> getUsersList() {
         return userRepository.findAll();
-    }
-
-    @Transactional
-    public void saveUser(User user) {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userRepository.save(user);
-    }
-
-    public User findByIdUsers(int id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Пользователь не найден"));
-    }
-
-
-    @Transactional
-    public void updateUser(int id, User user) {
-        User user1 = findByIdUsers(id);
-        user1.setUsername(user.getUsername());
-        user1.setSurname(user.getSurname());
-        user1.setEmeil(user.getEmeil());
-        user1.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userRepository.save(user1);
-    }
-
-    @Transactional
-    public void deleteByIdUsers(int id) {
-        userRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException(String.format("Пользователь '%s' не найден!", username));
-        }
-        return new ru.kata.spring.boot_security.demo.security.UserDetails(user.get());
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
+    @Override
+    public User getUserById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(User updateUser) {
+        updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        userRepository.save(updateUser);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("Пользователь '%s' не найдет", username));
+        }
+        return user;
+    }
 }

@@ -1,14 +1,13 @@
 package ru.kata.spring.boot_security.demo.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -16,35 +15,19 @@ public class Util {
     private final UserService userService;
     private final RoleService roleService;
 
-    @Autowired
     public Util(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
     @PostConstruct
-    public void initDB() {
-        Role adminRole = new Role(1, "ROLE_ADMIN");
-        Role userRole = new Role(2, "ROLE_USER");
-        Set<Role> adminSet = new HashSet<>();
-        Set<Role> userSet = new HashSet<>();
-        roleService.addRole(adminRole);
-        roleService.addRole(userRole);
-        adminSet.add(adminRole);
-        adminSet.add(userRole);
-        userSet.add(userRole);
-
-        User admin = new User("admin", "admin",
-                "admin@admin.ru", "admin", adminSet);
-        admin.setId(1);
-
-        User user = new User("user", "user",
-                "user@user.ru", "user", userSet);
-
-        user.setId(2);
-
-        userService.saveUser(admin);
-        userService.saveUser(user);
+    public void initializeDB() {
+        roleService.addRole(new Role("ROLE_ADMIN"));
+        roleService.addRole(new Role("ROLE_USER"));
+        userService.addUser(new User("name1", "lastname1", 20, "admin",
+                "admin", Set.of(new Role(1L, "ROLE_ADMIN"))));
+        userService.addUser(new User("name2", "lastname2", 20, "user1",
+                "user1", Set.of(new Role(2L, "ROLE_USER"))));
 
     }
 }
