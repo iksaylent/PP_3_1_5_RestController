@@ -31,15 +31,17 @@
     <div>
         <label for="roles">Роль:</label>
         <br/>
-        <input type="checkbox" id="roles" th:name="roles"
-               th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
-        </input>
+        <select name="roles" id="roles" size="2" multiple>
+            <option th:value="ROLE_ADMIN" th:text="ADMIN"></option>
+            <option th:value="ROLE_USER" th:text="USER"></option>
+        </select>
     </div>
 
     <br/>
     <br/>
     <input type="submit" value="Создать"/>
 </form>
+
 <br/>
 <form th:action="@{/logout}">
     <input type="submit" value="Выйти"/>
