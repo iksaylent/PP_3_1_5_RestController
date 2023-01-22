@@ -5,13 +5,12 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
-
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class    Util {
+public class Util {
     private final UserService userService;
     private final RoleService roleService;
 
@@ -21,13 +20,23 @@ public class    Util {
     }
 
     @PostConstruct
-    public void initializeDB() {
-        roleService.addRole(new Role("ROLE_ADMIN"));
-        roleService.addRole(new Role("ROLE_USER"));
-        userService.addUser(new User("admin", "admin", "admin@admin.ru",
-                "admin", Set.of(new Role(1L, "ROLE_ADMIN"))));
-        userService.addUser(new User("user", "user", "user@user.ru",
-                "user", Set.of(new Role(2L, "ROLE_USER"))));
+    public void startDataBase() {
+        Role roleAdmin = new Role("ROLE_ADMIN");
+        Role roleUser = new Role("ROLE_USER");
+        Set<Role> adminSet = new HashSet<>();
+        Set<Role> userSet = new HashSet<>();
 
+        roleService.addRole(roleAdmin);
+        roleService.addRole(roleUser);
+
+        adminSet.add(roleAdmin);
+        adminSet.add(roleUser);
+        userSet.add(roleUser);
+
+        User admin = new User("admin", "admin", "admin@mail.ru", "admin", adminSet);
+        User user = new User("user", "user", "user@mail.ru", "user", userSet);
+
+        userService.addUser(admin);
+        userService.addUser(user);
     }
 }
