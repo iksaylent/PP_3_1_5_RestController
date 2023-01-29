@@ -11,47 +11,44 @@ import ru.kata.spring.boot_security.demo.model.User;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
-
-
+    private UserDao userDao;
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
 
     @Override
-    public List<User> allUsers() {
-        return userDao.allUsers();
+    @Transactional
+    public void createUser(User user) {
+        userDao.createUser(user);
     }
 
-    @Transactional
     @Override
-    public void addUser(User user) {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        userDao.addUser(user);
-    }
-
     @Transactional
-    @Override
-    public void changeUser(long id, User updatesUser) {
-        userDao.changeUser(id, updatesUser);
-    }
-
-    @Transactional
-    @Override
     public void deleteUser(long id) {
         userDao.deleteUser(id);
     }
 
     @Override
-    public User getUserById(long id) {
-        return userDao.getUserById(id);
+    @Transactional
+    public void updateUser(User user, long id) {
+        userDao.updateUser(user, id);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
+    }
+
+    @Override
+    public User getUser(long id) {
+        return userDao.getUser(id);
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.getUserByUsername(username);
+    public UserDetails loadUserByUsername(String email) {
+        return userDao.loadUserByUsername(email);
     }
 }

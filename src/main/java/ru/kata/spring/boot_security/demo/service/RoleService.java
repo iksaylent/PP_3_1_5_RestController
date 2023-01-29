@@ -5,11 +5,10 @@ import java.util.List;
 
 public interface RoleService {
 
+    void createRole(Role role);
+
     List<Role> getAllRoles();
 
-    Role getRole(String userRole);
-
-    Role getRoleById(Long id);
-
-    void addRole(Role role);
+    Role finedRoleByRoleName(String roleName);
 }
+

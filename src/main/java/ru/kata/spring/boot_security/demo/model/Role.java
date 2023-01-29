@@ -9,74 +9,49 @@ import java.util.Set;
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "role")
-    private String name;
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private long id;
+    @Column(unique=true)
+    private String roleName;
 
     public Role() {
+
     }
 
-    public Role(Long id) {
+    public Role(long id) {
         this.id = id;
     }
-
-    public Role(String name) {
-        this.name = name;
+    public Role(String roleName) {
+        this.roleName = roleName;
     }
 
-    public Role(Long id, String name) {
+    public Role(long id, String roleName) {
         this.id = id;
-        this.name = name;
+        this.roleName = roleName;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
-
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRoleName() {
+        return roleName;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setRoleName(String role) {
+        this.roleName = role;
     }
 
     @Override
     public String getAuthority() {
-        return getName();
+        return getRoleName();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(name, role.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
     @Override
     public String toString() {
-        return name;
+        return this.roleName;
     }
 }

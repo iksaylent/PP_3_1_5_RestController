@@ -11,10 +11,11 @@ import java.util.List;
 public class HelloController {
 
     @GetMapping("/")
-    public String printWelcome(ModelMap model) {
-        List<String> messages = new ArrayList<>();
-        messages.add("PP_3_1_3_BootSecurity");
-        model.addAttribute("messages", messages);
-        return "hello";
+    public String loginPage() {
+        return "/login";
+    }
+    @GetMapping("/logout")
+    public String logoutPage() {
+        return "/login";
     }
 }

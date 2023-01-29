@@ -1,42 +1,55 @@
 package ru.kata.spring.boot_security.demo.util;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
-public class Util {
-    private final UserService userService;
-    private final RoleService roleService;
+public class Util implements CommandLineRunner {
+
+    private UserService userService;
+    private RoleService roleService;
 
     public Util(UserService userService, RoleService roleService) {
-        this.userService = userService;
         this.roleService = roleService;
+        this.userService = userService;
     }
 
-    @PostConstruct
-    public void startDataBase() {
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        Role roleUser = new Role("ROLE_USER");
-        Set<Role> adminSet = new HashSet<>();
-        Set<Role> userSet = new HashSet<>();
+    @Override
+    public void run(String... args) throws Exception {
+        Role admin = new Role();
+        admin.setRoleName("ROLE_ADMIN");
+        roleService.createRole(admin);
+        Role user = new Role();
+        user.setRoleName("ROLE_USER");
+        roleService.createRole(user);
 
-        roleService.addRole(roleAdmin);
-        roleService.addRole(roleUser);
+        User userAdmin = new User();
+        userAdmin.setUsername("admin");
+        userAdmin.setPassword("admin");
+        userAdmin.setName("admin");
+        userAdmin.setSurname("admin");
+        userAdmin.setAge(35);
+        userAdmin.setEmail("admin@mail.ru");
+        userService.createUser(userAdmin);
+        userAdmin.addRoleToUser(admin);
+        userAdmin.addRoleToUser(user);
+        userService.updateUser(userAdmin, userAdmin.getId());
 
-        adminSet.add(roleAdmin);
-        adminSet.add(roleUser);
-        userSet.add(roleUser);
+        User userUser = new User();
+        userUser.setUsername("user");
+        userUser.setPassword("user");
+        userUser.setName("user");
+        userUser.setSurname("user");
+        userUser.setAge(30);
+        userUser.setEmail("user@mail.ru");
+        userService.createUser(userUser);
+        userUser.addRoleToUser(user);
+        userService.updateUser(userUser, userUser.getId());
 
-        User admin = new User("admin", "admin", "admin@mail.ru", "admin", adminSet);
-        User user = new User("user", "user", "user@mail.ru", "user", userSet);
-
-        userService.addUser(admin);
-        userService.addUser(user);
     }
 }
+

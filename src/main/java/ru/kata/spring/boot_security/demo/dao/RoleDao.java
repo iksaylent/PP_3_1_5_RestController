@@ -6,11 +6,10 @@ import java.util.List;
 
 public interface RoleDao {
 
+    void createRole(Role role);
+
     List<Role> getAllRoles();
 
-    Role getRole(String userRole);
+    Role finedRoleByRoleName(String roleName);
 
-    Role getRoleById(Long id);
-
-    void addRole(Role role);
 }
