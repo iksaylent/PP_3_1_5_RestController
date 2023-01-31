@@ -11,7 +11,7 @@ import java.util.List;
 public class HelloController {
 
     @GetMapping("/")
-    public String loginPage() {
+    public String helloPage() {
         return "/login";
     }
     @GetMapping("/logout")

@@ -12,4 +12,7 @@ public interface RoleDao {
 
     Role finedRoleByRoleName(String roleName);
 
+    Role finedRoleById(long id);
+
 }
+

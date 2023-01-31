@@ -30,4 +30,9 @@ public class RoleDaoImpl implements RoleDao{
         return  (Role) query.getSingleResult();
     }
 
+    @Override
+    public Role finedRoleById(long id) {
+        return entityManager.find(Role.class, id);
+    }
 }
+

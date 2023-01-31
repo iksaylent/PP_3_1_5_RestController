@@ -10,5 +10,7 @@ public interface RoleService {
     List<Role> getAllRoles();
 
     Role finedRoleByRoleName(String roleName);
-}
 
+    Role finedRoleById(long id);
+
+}
