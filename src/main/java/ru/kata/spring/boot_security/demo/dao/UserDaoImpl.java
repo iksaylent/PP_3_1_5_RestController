@@ -34,7 +34,8 @@ public class UserDaoImpl implements UserDao{
         if(user.getRoles() != null) {
             Iterator<Role> iterator = user.getRoles().iterator();
             while (iterator.hasNext()) {
-                Role role = roleService.finedRoleByRoleName(iterator.next().getRoleName());
+               // Role role = roleService.finedRoleByRoleName(iterator.next().getRoleName());
+                Role role = roleService.finedRoleById(iterator.next().getId());
                 roleSet.add(role);
             }
         }
@@ -55,7 +56,8 @@ public class UserDaoImpl implements UserDao{
         if(user.getRoles() != null) {
             Iterator<Role> iterator = user.getRoles().iterator();
             while (iterator.hasNext()) {
-                Role role = roleService.finedRoleByRoleName(iterator.next().getRoleName());
+              // Role role = roleService.finedRoleByRoleName(iterator.next().getRoleName());
+                Role role = roleService.finedRoleById(iterator.next().getId());
                 roleSet.add(role);
             }
         }
